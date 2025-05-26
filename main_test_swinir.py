@@ -7,6 +7,7 @@ import os
 import torch
 import requests
 import traceback
+from PIL import Image
 
 from models.network_swinir import SwinIR as net
 from utils import util_calculate_psnr_ssim as util
@@ -31,7 +32,7 @@ def main(args=None):
         parser.add_argument('--tile', type=int, default=None, help='Tile size, None for no tile during testing (testing as a whole)')
         parser.add_argument('--tile_overlap', type=int, default=32, help='Overlapping of different tiles')
         args = parser.parse_args()
-    
+
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     # set up model
@@ -60,6 +61,9 @@ def main(args=None):
     test_results['psnrb_y'] = []
     psnr, ssim, psnr_y, ssim_y, psnrb, psnrb_y = 0, 0, 0, 0, 0, 0
 
+
+    unprocessed_image = []
+    uprocessed_image_size = []
     for idx, path in enumerate(sorted(glob.glob(os.path.join(folder, '*')))):
         try:
             # Load and preprocess image
@@ -114,6 +118,9 @@ def main(args=None):
                 print(f'Testing {idx} {imgname:20s}')
 
         except Exception as e:
+            img = Image.open(path)
+            uprocessed_image_size.append(img.size)
+            unprocessed_image.append(path)
             print(f"[ERROR] Failed to process image {path}")
             traceback.print_exc()
 
@@ -135,7 +142,7 @@ def main(args=None):
             if args.task in ['color_jpeg_car']:
                 ave_psnrb_y = sum(test_results['psnrb_y']) / len(test_results['psnrb_y'])
                 print('-- Average PSNRB_Y: {:.2f} dB'.format(ave_psnrb_y))
-
+    return unprocessed_image, uprocessed_image_size
 
 def define_model(args):
     # 001 classical image sr
