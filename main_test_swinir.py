@@ -85,7 +85,7 @@ def main(args=None):
             if output.ndim == 3:
                 output = np.transpose(output[[2, 1, 0], :, :], (1, 2, 0))
             output = (output * 255.0).round().astype(np.uint8)
-            cv2.imwrite(f'{save_dir}/{imgname}_SwinIR.png', output)
+            cv2.imwrite(f'{save_dir}/{imgname}.png', output)
 
             # Evaluation
             if img_gt is not None:
