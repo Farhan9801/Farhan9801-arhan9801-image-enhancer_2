@@ -208,7 +208,8 @@ def get_image_pair(args, path, dic: dict):
 
     generated_uuid = str(uuid.uuid4())
     (imgname, imgext) = os.path.splitext(os.path.basename(path))
-    dic['imgname'] = generated_uuid
+    print('11111111111111111', imgname)
+    dic[imgname] = generated_uuid
 
 
     # 001 classical image sr/ 002 lightweight image sr (load lq-gt image pairs)
