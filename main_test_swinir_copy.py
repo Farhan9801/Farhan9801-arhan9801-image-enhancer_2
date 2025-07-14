@@ -33,6 +33,7 @@ def main(args=None):
         parser.add_argument('--folder_gt', type=str, default=None, help='input ground-truth test image folder')
         parser.add_argument('--tile', type=int, default=None, help='Tile size, None for no tile during testing (testing as a whole)')
         parser.add_argument('--tile_overlap', type=int, default=32, help='Overlapping of different tiles')
+        parser.add_argument('--folder_enhance', type=str, default='result', help='Folder where you want to save the enhanced image ')
         args = parser.parse_args()
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -82,7 +83,7 @@ def main(args=None):
             output = (output * 255.0).round().astype(np.uint8)
             cv2.imwrite(f'{save_dir}/{imgname}.png', output)
 
-            print(f'Processed {idx} {imgname:20s} - Saved to {save_dir}/{imgname}.png')
+            print(f'Processed {idx} Saved to {save_dir}/{imgname}.png')
 
         except Exception as e:
             img = Image.open(path)
@@ -179,7 +180,7 @@ def setup(args):
 
     # 003 real-world image sr
     elif args.task in ['real_sr']:
-        save_dir = f'results/swinir_{args.task}_x{args.scale}'
+        save_dir = f'results/{args.folder_enhance}'
         if args.large_model:
             save_dir += '_large'
         folder = args.folder_lq
@@ -205,7 +206,7 @@ def setup(args):
 
 def get_image_pair(args, path, dic: dict):
 
-    generated_uuid = uuid.uuid4()
+    generated_uuid = str(uuid.uuid4())
     (imgname, imgext) = os.path.splitext(os.path.basename(path))
     dic['imgname'] = generated_uuid
 
