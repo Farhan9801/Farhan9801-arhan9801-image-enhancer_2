@@ -181,8 +181,8 @@ def setup(args):
     # 003 real-world image sr
     elif args.task in ['real_sr']:
         save_dir = f'results/{args.folder_enhance}'
-        if args.large_model:
-            save_dir += '_large'
+        # if args.large_model:
+        #     save_dir += '_large'
         folder = args.folder_lq
         border = 0
         window_size = 8
