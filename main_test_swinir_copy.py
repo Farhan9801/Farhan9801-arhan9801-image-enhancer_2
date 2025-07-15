@@ -207,7 +207,7 @@ def setup(args):
     return folder, save_dir, border, window_size
 
 
-def get_image_pair(args, path, dic: dict):
+def get_image_pair(args, path):
 
     generated_uuid = str(uuid.uuid4())
     (imgname, imgext) = os.path.splitext(os.path.basename(path))
