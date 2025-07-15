@@ -63,7 +63,10 @@ def main(args=None):
     for idx, path in enumerate(sorted(glob.glob(os.path.join(folder, '*')))):
         try:
             # Load and preprocess image
-            imgname, img_lq, img_gt = get_image_pair(args, path, dic)
+            generated_uuid, img_lq, img_gt = get_image_pair(args, path)
+            (imgname, imgext) = os.path.splitext(os.path.basename(path))
+            dic[imgname] = generated_uuid
+
             img_lq = np.transpose(img_lq if img_lq.shape[2] == 1 else img_lq[:, :, [2, 1, 0]], (2, 0, 1))
             img_lq = torch.from_numpy(img_lq).float().unsqueeze(0).to(device)
 
@@ -208,8 +211,6 @@ def get_image_pair(args, path, dic: dict):
 
     generated_uuid = str(uuid.uuid4())
     (imgname, imgext) = os.path.splitext(os.path.basename(path))
-    print('11111111111111111', imgname)
-    dic[imgname] = generated_uuid
 
 
     # 001 classical image sr/ 002 lightweight image sr (load lq-gt image pairs)
