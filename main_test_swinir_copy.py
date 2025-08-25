@@ -90,8 +90,9 @@ def main(args=None):
 
         except Exception as e:
             img = Image.open(path)
-            os.makedirs("Unprocessed", exist_ok=True)
+            # os.makedirs(f"Unprocessed/{save_dir}", exist_ok=True)
             zz = f"Unprocessed/{save_dir}/{imgname}.png"
+            os.makedirs(os.path.dirname(zz), exist_ok=True)
             img.save(zz)
             unprocessed_image_size.append(img.size)
             unprocessed_image.append(path)
